@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRIPTA NOCTURNA // Expedientes del Terror</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=JetBrains+Mono:wght@400;700&family=Nosifer&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Linterna que sigue al mouse -->
+  <div id="flashlight" aria-hidden="true"></div>
+
+  <!-- Cursor fantasma personalizado -->
+  <div id="ghost-cursor" aria-hidden="true">👻</div>
+
+  <!-- Fondo dinámico: Luna de sangre, cielo nocturno, murciélagos y niebla -->
+  <div class="sky-backdrop" aria-hidden="true">
+    <div class="blood-moon"></div>
+    <canvas id="night-canvas"></canvas>
+    <div class="fog-wave fog-1"></div>
+    <div class="fog-wave fog-2"></div>
+    <!-- Silueta de cementerio y casa embrujada -->
+    <svg class="cemetery-silhouette" viewBox="0 0 1440 260" preserveAspectRatio="none">
+      <path fill="#050308" d="M0,260 L0,195 L60,195 L60,150 L75,140 L90,150 L90,195 L150,195 L150,165 L165,165 L165,145 L175,145 L175,165 L190,165 L190,195 L280,195 L310,120 L330,120 L330,95 L350,70 L370,95 L370,115 L410,115 L430,85 L450,115 L470,115 L490,195 L610,195 L610,160 Q625,142 640,160 L640,195 L740,195 L740,150 L750,150 L750,130 L762,130 L762,150 L772,150 L772,195 L890,195 L890,165 Q910,145 930,165 L930,195 L1080,195 L1110,135 L1125,135 L1145,195 L1260,195 L1260,155 L1275,155 L1275,135 L1287,135 L1287,155 L1302,155 L1302,195 L1440,195 L1440,260 Z"/>
+    </svg>
+  </div>
+
+  <!-- Barra de navegación -->
+  <header class="navbar">
+    <div class="logo-wrap">
+      <span class="skull-badge">💀</span>
+      <span class="logo-text">CRIPTA_NOCTURNA</span>
+    </div>
+    <nav class="nav-items">
+      <a href="#personajes">Personajes</a>
+      <a href="#leyendas">Leyendas y Curiosidades</a>
+      <a href="#minijuego">Cacería</a>
+      <button id="btn-audio" class="ctrl-btn" type="button">🔊 Ambiente: OFF</button>
+      <button id="btn-scare" class="ctrl-btn danger-btn" type="button">👁️ Invocar Entidad</button>
+    </nav>
+  </header>
+
+  <main class="wrapper">
+    <!-- Hero principal -->
+    <section class="hero">
+      <p class="tag-line mono">ARCHIVO PROHIBIDO // HALLOWEEN 2026</p>
+      <h1 class="main-title">NOCHES DE TERROR</h1>
+      <p class="hero-desc">
+        Explorá los expedientes malditos de <strong>Annabelle</strong>, <strong>Pennywise (It)</strong>, <strong>El Exorcista</strong> y otros íconos del horror, junto a leyendas de Halloween, curiosidades oscuras y un desafío interactivo.
+      </p>
+      <div class="hero-btns">
+        <a href="#personajes" class="primary-cta">Ver Expedientes</a>
+        <a href="#minijuego" class="secondary-cta">Jugar Cacería</a>
+      </div>
+    </section>
+
+    <!-- Sección 1: Personajes de Terror con ilustraciones -->
+    <section id="personajes" class="block">
+      <div class="block-header">
+        <div>
+          <p class="eyebrow mono">GALERÍA DE HORROR</p>
+          <h2>Entidades y Personajes Malditos</h2>
+        </div>
+        <div class="filter-bar" role="tablist">
+          <button class="filter-btn active" data-filter="all" type="button">Todos (6)</button>
+          <button class="filter-btn" data-filter="posesion" type="button">Posesión &amp; Objetos</button>
+          <button class="filter-btn" data-filter="entidad" type="button">Entidades &amp; Pesadillas</button>
+        </div>
+      </div>
+
+      <div id="characters-grid" class="cards-grid"></div>
+    </section>
+
+    <!-- Sección 2: Historias, Leyendas y Curiosidades de Halloween -->
+    <section id="leyendas" class="block">
+      <div class="block-header">
+        <div>
+          <p class="eyebrow mono">ARCHIVO FOLKLÓRICO</p>
+          <h2>Historias, Leyendas y Curiosidades</h2>
+        </div>
+      </div>
+      <div id="lore-grid" class="lore-grid"></div>
+    </section>
+
+    <!-- Sección 3: Propuesta interactiva (Minijuego) -->
+    <section id="minijuego" class="block game-panel">
+      <div class="game-top">
+        <div>
+          <p class="eyebrow mono">DESAFÍO INTERACTIVO</p>
+          <h2>Cacería en el Cementerio</h2>
+          <p class="muted">Atrapá los fantasmas, calabazas y espectros que emergen entre las lápidas antes de que se acabe el tiempo.</p>
+        </div>
+        <div class="scoreboard mono">
+          <span>PUNTOS: <strong id="g-score">0</strong></span>
+          <span>TIEMPO: <strong id="g-time">25</strong>s</span>
+          <span>RÉCORD: <strong id="g-best">0</strong></span>
+        </div>
+      </div>
+
+      <div id="graveyard-arena" class="graveyard-arena">
+        <button id="btn-start-hunt" class="primary-cta" type="button">Iniciar Cacería</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de lectura detallada -->
+  <dialog id="dossier-modal" class="dossier-modal">
+    <div class="dossier-inner">
+      <div class="dossier-head">
+        <span id="m-category" class="pill mono"></span>
+        <button id="m-close" class="ctrl-btn" type="button">✕ Cerrar</button>
+      </div>
+      <div id="m-art" class="modal-art"></div>
+      <h3 id="m-title"></h3>
+      <p id="m-year" class="mono muted small-meta"></p>
+      <p id="m-story" class="dossier-story"></p>
+      <div class="dossier-fact">
+        <strong>Dato inquietante:</strong> <span id="m-fact"></span>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Overlay de susto rápido (Jumpscare controlado) -->
+  <div id="scare-overlay" class="scare-overlay" hidden>
+    <div class="scare-card">
+      <div class="scare-face">👹</div>
+      <p class="creep-font">¡NO MIRES ATRÁS!</p>
+    </div>
+  </div>
+
+  <footer class="site-footer mono">
+    <span>Escuela Técnica "Carmen Molina de Llano" • Lab. de Aplicaciones II</span>
+    <span>Halloween Web • 5to 1ra</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
